@@ -8,54 +8,48 @@ html,
 body{
     margin:0;
     padding:0;
+    width:100%;
+    height:100%;
     background:transparent;
     overflow:hidden;
 }
 
-/* REMOVE WHITE EDGES */
-iframe,
-div,
+body{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
 *{
     box-sizing:border-box;
 }
 
 .shirokuro-card{
     width:220px;
-    height:86px;
+    height:110px; /* FIXED HEIGHT */
 
     padding:14px;
 
-    border-radius:22px;
+    border-radius:26px;
 
-    background:#0d0d10;
+    background:
+    radial-gradient(circle at top,
+    #2b2b2f 0%,
+    #141418 55%,
+    #09090b 100%);
 
     border:1px solid rgba(255,255,255,.06);
-
-    overflow:hidden;
 
     font-family:-apple-system,BlinkMacSystemFont,
     "Segoe UI",Helvetica,Arial,sans-serif;
 
     color:#fff;
 
-    /* THIS FIXES THE WHITE CORNERS */
-    isolation:isolate;
-}
+    overflow:hidden;
 
-/* DARK OVERLAY TO KILL WHITE GLOW */
-.shirokuro-card::before{
-    content:"";
-    position:absolute;
-    inset:0;
-    border-radius:22px;
-
-    background:
-    radial-gradient(circle at top,
-    #2b2b2f 0%,
-    #141418 58%,
-    #0b0b0d 100%);
-
-    z-index:-1;
+    box-shadow:
+    0 16px 40px rgba(0,0,0,.45),
+    inset 0 1px 0 rgba(255,255,255,.04);
 }
 
 .flex{
@@ -85,22 +79,25 @@ div,
 
 .track{
     width:100%;
-    height:13px;
-
-    border-radius:999px;
-
-    background:#121216;
-
-    overflow:hidden;
+    height:14px;
 
     position:relative;
 
-    border:1px solid rgba(255,255,255,.03);
+    border-radius:999px;
 
-    /* THIS IS THE REAL FIX */
+    overflow:hidden;
+
+    background:
+    linear-gradient(
+    180deg,
+    rgba(255,255,255,.03),
+    rgba(255,255,255,.01)
+    );
+
+    border:1px solid rgba(255,255,255,.04);
+
     box-shadow:
-    inset 0 0 0 999px rgba(0,0,0,.18),
-    inset 0 2px 5px rgba(0,0,0,.7);
+    inset 0 2px 6px rgba(0,0,0,.65);
 }
 
 .fill{
@@ -117,14 +114,17 @@ div,
     linear-gradient(
     90deg,
     #ffffff 0%,
-    #d8d8d8 50%,
+    #d9d9d9 50%,
     #8a8a8a 100%
     );
 
-    /* REMOVE WHITE OUTER GLOW */
     box-shadow:none;
 
     transition:width 1.2s ease;
+}
+
+.bottom{
+    margin-top:12px;
 }
 </style>
 </head>
@@ -149,9 +149,7 @@ div,
         <div class="fill" id="bar"></div>
     </div>
 
-    <div style="height:10px;"></div>
-
-    <div class="flex">
+    <div class="bottom flex">
         <div class="dim">0</div>
         <div class="dim">2000</div>
     </div>
@@ -165,11 +163,11 @@ async function loadCount(){
 
     try{
 
-        const res = await fetch(
+        const response = await fetch(
             "https://api.chess.com/pub/club/shirokuro"
         );
 
-        const data = await res.json();
+        const data = await response.json();
 
         const count = data.members_count;
 
@@ -184,7 +182,7 @@ async function loadCount(){
             .style.width = percent + "%";
         });
 
-    }catch(e){
+    }catch(err){
 
         document.getElementById("count")
         .innerText = "Error";

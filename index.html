@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            margin: 0;
+            background: transparent;
+            overflow: hidden;
+        }
+
+        .shirokuro-container {
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            color: #ffffff;
+            width: 220px;
+            max-width: 320px;
+        }
+
+        .shirokuro-card {
+            width: 220px;
+            height: 86px;
+            background:
+                radial-gradient(circle at top, #2b2b2f, #0f0f12 72%);
+            color: #ffffff;
+            border-radius: 22px;
+            padding: 14px;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-top: 1px solid rgba(255,255,255,0.14);
+            box-shadow:
+                0 18px 40px rgba(0,0,0,.75),
+                inset 0 1px 0 rgba(255,255,255,.04);
+            backdrop-filter: blur(8px);
+        }
+
+        .flex-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 15px;
+            letter-spacing: .2px;
+        }
+
+        .title {
+            font-weight: 700;
+            color: #f4f4f4;
+        }
+
+        .spacer {
+            height: 14px;
+        }
+
+        /* Progress Bar */
+        .progress-track {
+            position: relative;
+            height: 13px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.07);
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.06);
+            margin-bottom: 10px;
+            box-shadow:
+                inset 0 2px 6px rgba(0,0,0,.55);
+        }
+
+        .progress-fill {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 0%;
+            border-radius: 999px;
+            background:
+                linear-gradient(
+                    90deg,
+                    #ffffff 0%,
+                    #d9d9d9 45%,
+                    #7e7e7e 100%
+                );
+            box-shadow:
+                0 0 12px rgba(255,255,255,.18);
+            transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .white-text {
+            color: #ffffff;
+        }
+
+        .silver-text {
+            color: #b8b8b8;
+        }
+
+        .muted-text {
+            color: #8f8f94;
+        }
+    </style>
+</head>
+<body>
+
+<div class="shirokuro-container">
+    <div class="shirokuro-card">
+
+        <div class="flex-row">
+            <strong class="title">SHIROKURO</strong>
+
+            <span>
+                <strong class="white-text" id="current-count">...</strong>
+                <strong class="muted-text"> / </strong>
+                <strong class="silver-text">2000</strong>
+            </span>
+        </div>
+
+        <div class="spacer"></div>
+
+        <div class="progress-track">
+            <div id="progress-bar" class="progress-fill"></div>
+        </div>
+
+        <div class="flex-row">
+            <strong class="muted-text">0</strong>
+            <strong class="silver-text">2000</strong>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    async function updateShirokuroProgress() {
+
+        // CHANGE THIS TO YOUR CLUB SLUG
+        const clubSlug = 'shirokuro';
+
+        const goal = 2000;
+
+        const currentCountEl =
+            document.getElementById('current-count');
+
+        const progressBarEl =
+            document.getElementById('progress-bar');
+
+        try {
+
+            const response = await fetch(
+                `https://api.chess.com/pub/club/${clubSlug}`,
+                {
+                    headers: {
+                        'User-Agent':
+                        'ShiroKuroProgress/1.0'
+                    }
+                }
+            );
+
+            if (!response.ok)
+                throw new Error('API Error');
+
+            const data = await response.json();
+
+            const count = data.members_count;
+
+            currentCountEl.innerText =
+                count.toLocaleString();
+
+            let percentage =
+                (count / goal) * 100;
+
+            if (percentage > 100)
+                percentage = 100;
+
+            if (percentage < 0)
+                percentage = 0;
+
+            progressBarEl.style.width =
+                percentage + '%';
+
+        } catch (error) {
+
+            console.error(
+                "Failed to load member count:",
+                error
+            );
+
+            currentCountEl.innerText =
+                "Error";
+        }
+    }
+
+    updateShirokuroProgress();
+</script>
+
+</body>
+</html>

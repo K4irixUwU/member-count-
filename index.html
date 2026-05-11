@@ -8,16 +8,12 @@ html,
 body{
     margin:0;
     padding:0;
-    width:100%;
-    height:100%;
     background:transparent;
     overflow:hidden;
-}
 
-body{
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    /* IMPORTANT */
+    width:220px;
+    height:110px;
 }
 
 *{
@@ -26,11 +22,11 @@ body{
 
 .shirokuro-card{
     width:220px;
-    height:110px; /* FIXED HEIGHT */
+    height:110px;
 
     padding:14px;
 
-    border-radius:26px;
+    border-radius:24px;
 
     background:
     radial-gradient(circle at top,
@@ -48,7 +44,7 @@ body{
     overflow:hidden;
 
     box-shadow:
-    0 16px 40px rgba(0,0,0,.45),
+    0 10px 30px rgba(0,0,0,.45),
     inset 0 1px 0 rgba(255,255,255,.04);
 }
 
@@ -61,7 +57,6 @@ body{
 .title{
     font-size:14px;
     font-weight:700;
-    letter-spacing:.3px;
 }
 
 .count{
@@ -70,7 +65,7 @@ body{
 }
 
 .dim{
-    color:#8d8d93;
+    color:#8e8e95;
 }
 
 .spacer{
@@ -79,25 +74,17 @@ body{
 
 .track{
     width:100%;
-    height:14px;
-
-    position:relative;
+    height:13px;
 
     border-radius:999px;
 
     overflow:hidden;
 
-    background:
-    linear-gradient(
-    180deg,
-    rgba(255,255,255,.03),
-    rgba(255,255,255,.01)
-    );
+    background:#0b0b0d;
 
     border:1px solid rgba(255,255,255,.04);
 
-    box-shadow:
-    inset 0 2px 6px rgba(0,0,0,.65);
+    position:relative;
 }
 
 .fill{
@@ -105,8 +92,8 @@ body{
     top:0;
     left:0;
 
-    width:0%;
     height:100%;
+    width:0%;
 
     border-radius:999px;
 
@@ -114,13 +101,11 @@ body{
     linear-gradient(
     90deg,
     #ffffff 0%,
-    #d9d9d9 50%,
-    #8a8a8a 100%
+    #d7d7d7 50%,
+    #8d8d8d 100%
     );
 
-    box-shadow:none;
-
-    transition:width 1.2s ease;
+    transition:width 1s ease;
 }
 
 .bottom{
@@ -177,10 +162,8 @@ async function loadCount(){
         const percent =
         Math.min((count / goal) * 100,100);
 
-        requestAnimationFrame(()=>{
-            document.getElementById("bar")
-            .style.width = percent + "%";
-        });
+        document.getElementById("bar")
+        .style.width = percent + "%";
 
     }catch(err){
 

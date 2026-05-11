@@ -2,239 +2,196 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 <style>
 html,
-body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    background: transparent !important;
+body{
+    margin:0;
+    padding:0;
+    background:transparent;
+    overflow:hidden;
 }
 
-body {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+/* REMOVE WHITE EDGES */
+iframe,
+div,
+*{
+    box-sizing:border-box;
 }
 
-* {
-    box-sizing: border-box;
+.shirokuro-card{
+    width:220px;
+    height:86px;
+
+    padding:14px;
+
+    border-radius:22px;
+
+    background:#0d0d10;
+
+    border:1px solid rgba(255,255,255,.06);
+
+    overflow:hidden;
+
+    font-family:-apple-system,BlinkMacSystemFont,
+    "Segoe UI",Helvetica,Arial,sans-serif;
+
+    color:#fff;
+
+    /* THIS FIXES THE WHITE CORNERS */
+    isolation:isolate;
 }
 
-.shirokuro-container {
-    width: 220px;
-    height: 86px;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
-        Helvetica, Arial, sans-serif;
-}
-
-.shirokuro-card {
-    width: 220px;
-    height: 86px;
-    padding: 14px;
+/* DARK OVERLAY TO KILL WHITE GLOW */
+.shirokuro-card::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    border-radius:22px;
 
     background:
-        radial-gradient(circle at top,
-        #2b2b2f 0%,
-        #141418 55%,
-        #0b0b0d 100%);
+    radial-gradient(circle at top,
+    #2b2b2f 0%,
+    #141418 58%,
+    #0b0b0d 100%);
 
-    border-radius: 22px;
+    z-index:-1;
+}
 
-    border: 1px solid rgba(255,255,255,0.07);
+.flex{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
 
+.title{
+    font-size:14px;
+    font-weight:700;
+    letter-spacing:.3px;
+}
+
+.count{
+    font-size:14px;
+    font-weight:700;
+}
+
+.dim{
+    color:#8d8d93;
+}
+
+.spacer{
+    height:14px;
+}
+
+.track{
+    width:100%;
+    height:13px;
+
+    border-radius:999px;
+
+    background:#121216;
+
+    overflow:hidden;
+
+    position:relative;
+
+    border:1px solid rgba(255,255,255,.03);
+
+    /* THIS IS THE REAL FIX */
     box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.05),
-        0 10px 30px rgba(0,0,0,0.55);
-
-    overflow: hidden;
+    inset 0 0 0 999px rgba(0,0,0,.18),
+    inset 0 2px 5px rgba(0,0,0,.7);
 }
 
-.flex-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+.fill{
+    position:absolute;
+    top:0;
+    left:0;
 
-.title {
-    font-size: 14px;
-    font-weight: 700;
-    color: #f5f5f5;
-    letter-spacing: 0.4px;
-}
+    width:0%;
+    height:100%;
 
-.white-text {
-    color: #ffffff;
-    font-weight: 700;
-}
-
-.silver-text {
-    color: #b7b7bb;
-    font-weight: 700;
-}
-
-.muted-text {
-    color: #7f7f86;
-    font-weight: 700;
-}
-
-.spacer {
-    height: 14px;
-}
-
-/* TRACK */
-.progress-track {
-    position: relative;
-    width: 100%;
-    height: 13px;
-
-    border-radius: 999px;
+    border-radius:999px;
 
     background:
-        linear-gradient(
-            180deg,
-            rgba(255,255,255,0.04),
-            rgba(255,255,255,0.015)
-        );
+    linear-gradient(
+    90deg,
+    #ffffff 0%,
+    #d8d8d8 50%,
+    #8a8a8a 100%
+    );
 
-    border: 1px solid rgba(255,255,255,0.05);
+    /* REMOVE WHITE OUTER GLOW */
+    box-shadow:none;
 
-    overflow: hidden;
-
-    box-shadow:
-        inset 0 2px 5px rgba(0,0,0,0.6);
-}
-
-/* THIS FIXES THE WHITE PART */
-.progress-track::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-
-    background:
-        linear-gradient(
-            90deg,
-            rgba(255,255,255,0.02),
-            transparent 40%,
-            transparent
-        );
-
-    pointer-events: none;
-}
-
-.progress-fill {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 0%;
-
-    border-radius: 999px;
-
-    background:
-        linear-gradient(
-            90deg,
-            #ffffff 0%,
-            #d8d8d8 45%,
-            #8a8a8a 100%
-        );
-
-    box-shadow:
-        0 0 10px rgba(255,255,255,0.10);
-
-    transition: width 1.4s cubic-bezier(0.4,0,0.2,1);
+    transition:width 1.2s ease;
 }
 </style>
 </head>
 
 <body>
 
-<div class="shirokuro-container">
+<div class="shirokuro-card">
 
-    <div class="shirokuro-card">
+    <div class="flex">
+        <div class="title">SHIROKURO</div>
 
-        <div class="flex-row">
-            <div class="title">SHIROKURO</div>
-
-            <div>
-                <span class="white-text" id="current-count">...</span>
-                <span class="muted-text"> / </span>
-                <span class="silver-text">2000</span>
-            </div>
+        <div class="count">
+            <span id="count">...</span>
+            <span class="dim"> / </span>
+            <span class="dim">2000</span>
         </div>
+    </div>
 
-        <div class="spacer"></div>
+    <div class="spacer"></div>
 
-        <div class="progress-track">
-            <div class="progress-fill" id="progress-bar"></div>
-        </div>
+    <div class="track">
+        <div class="fill" id="bar"></div>
+    </div>
 
-        <div class="spacer" style="height:10px;"></div>
+    <div style="height:10px;"></div>
 
-        <div class="flex-row">
-            <div class="muted-text">0</div>
-            <div class="silver-text">2000</div>
-        </div>
-
+    <div class="flex">
+        <div class="dim">0</div>
+        <div class="dim">2000</div>
     </div>
 
 </div>
 
 <script>
-async function updateShirokuroProgress() {
+async function loadCount(){
 
-    const clubSlug = "shirokuro";
     const goal = 2000;
 
-    const currentCountEl =
-        document.getElementById("current-count");
+    try{
 
-    const progressBarEl =
-        document.getElementById("progress-bar");
-
-    try {
-
-        const response = await fetch(
-            `https://api.chess.com/pub/club/${clubSlug}`
+        const res = await fetch(
+            "https://api.chess.com/pub/club/shirokuro"
         );
 
-        if (!response.ok)
-            throw new Error("API Error");
-
-        const data = await response.json();
+        const data = await res.json();
 
         const count = data.members_count;
 
-        currentCountEl.innerText =
-            count.toLocaleString();
+        document.getElementById("count")
+        .innerText = count.toLocaleString();
 
-        let percentage =
-            (count / goal) * 100;
+        const percent =
+        Math.min((count / goal) * 100,100);
 
-        percentage = Math.max(
-            0,
-            Math.min(100, percentage)
-        );
-
-        requestAnimationFrame(() => {
-            progressBarEl.style.width =
-                percentage + "%";
+        requestAnimationFrame(()=>{
+            document.getElementById("bar")
+            .style.width = percent + "%";
         });
 
-    } catch (error) {
+    }catch(e){
 
-        console.error(error);
-
-        currentCountEl.innerText = "Error";
+        document.getElementById("count")
+        .innerText = "Error";
     }
 }
 
-updateShirokuroProgress();
+loadCount();
 </script>
 
 </body>
